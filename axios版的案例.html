@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #app {
+            width: 600px;
+            margin: 10px auto;
+        }
+
+        .tb {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .tb th {
+            background-color: #0094ff;
+            color: white;
+        }
+
+        .tb td,
+        .tb th {
+            padding: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        .add {
+            padding: 5px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="add">
+            品牌名称:
+            <input type="text" v-model='item' ref="txt">
+            <input type="button" value="添加" @click='addItem' :disabled='item.length==0'>
+        </div>
+
+        <div class="add">
+            品牌名称:
+            <input type="text" placeholder="请输入搜索条件" v-model="search">
+        </div>
+
+        <div>
+            <table class="tb">
+                <tr>
+                    <th>编号</th>
+                    <th>品牌名称</th>
+                    <th>创立时间</th>
+                    <th>操作</th>
+                </tr>
+                <tr v-for='(v,i) in lists' v-cloak>
+                    <td>{{v.id}}</td>
+                    <td>{{v.name}}</td>
+                    <td>{{v.date|fmData}}</td>
+                    <td>
+                        <a href="#" @click.prevent='delitem(v.id)'>删除</a>
+                    </td>
+                </tr>
+                <tr v-if='lists.length==0'>
+                    <td colspan="4">没有品牌数据</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="vue.js"></script>
+    <script src="moment.js"></script>
+    <script src="axios.min.js"></script>
+    <script>
+        Vue.filter('fmData',(v)=>{
+            return moment(v).format('YYYY-MM-DD hh:mm:ss')
+        });
+        // var lists = [{ name: 'tcl', time: new Date() }, { name: 'XXOO', time: new Date() }, { name: '娃娃', time: new Date() }];
+        new Vue({
+            el:'#app',
+            data:{
+                lists:[],
+                item:'',
+                search:''
+            },
+            mounted() {
+                // console.log(this.$refs)
+                this.$refs.txt.focus();
+                this.getBrands()
+            },
+            computed:{
+                // newLists(){
+                //     return this.lists.filter((item)=>{
+                //         return item.name.startsWith(this.search)
+                //     })
+                // }
+                lists(){
+                    return 
+                }
+            },
+            methods:{
+                addItem(){
+                    axios.post('http://localhost:3000/brands',{
+                        name:this.item,
+                        date:new Date()
+                    }).then((res)=>{
+                        const {status,data}=res
+                        if(status===201){
+                            this.getBrands()                           
+                        }
+                    })
+                },
+                
+                delitem(ID){
+                    axios.delete('http://localhost:3000/brands/'+ID).then((res)=>{
+                        const {status,data}=res
+                        if(status===200){
+                            this.getBrands()
+                        }
+                    })
+                },
+                getBrands(){
+                    axios.get('http://localhost:3000/brands').then((res)=>{
+                        console.log(res)
+                        const {status,data}=res
+                        if(status==200){
+                            this.lists=data
+                        }
+                    })
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

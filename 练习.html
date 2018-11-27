@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    /* [v-cloak]{
+        display: none;
+    } */
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- {{checkboxList}}
+        <input type="checkbox" value="男" v-model="checkboxList">男
+        <input type="checkbox" value="女" v-model="checkboxList">女
+        <input type="checkbox" value="另类" v-model="checkboxList">另类
+        <br> {{sex}}
+        <input type="radio" value="男" v-model="sex">男
+        <input type="radio" value="女" v-model="sex">女
+        <input type="radio" value="另类" v-model="sex">另类
+        <br> -->
+         <!-- <span v-cloak>{{msg|toUpper}}</span>
+         <input type="text" v-focus> -->
+         <router-link :to={name:'aaa'}>1</router-link>
+         <router-link :to={path:'bbb'}>2</router-link>
+         <router-link to='/ccc'>3</router-link>
+         <router-view></router-view>
+    </div>
+
+
+    <script src="vue.js"></script>
+    <script src="vue-router.js"></script>
+    <script>
+        // Vue.filter('toUpper',(v)=>{
+        //     return v.charAt(0).toUpperCase()+v.slice(1)
+        // })
+        // Vue.directive('focus',{
+        //     inserted(el){
+        //         return el.focus()
+        //     }
+        // })
+        // var vm=new Vue({
+        //     el: '#app',
+        //     data: {
+        //         // sex: '',
+        //         // checkboxList: [],
+        //         msg: 'jkah'
+        //     },
+        //     filters: {
+        //         toUpper (v) {
+        //             return v.charAt(0).toUpperCase() + v.slice(1)
+        //         }
+        //     }
+        // })
+
+            var comA={
+                template:`<div>aaaaaaaa</div>`
+            }
+            var comB={
+                template:`<div>bbbbbbbb</div>`
+            }
+            var comC={
+                template:`<div>cccccccc</div>`
+            }
+            // var Zm={
+            //     template:`<div>{{$route.params.id}}</div>`
+            // }
+
+
+
+
+        var router=new VueRouter({
+            routes:[
+                // {
+                //     name:'aaa',
+                //     path:'/zm/:id',
+                //     component:Zm
+                // }
+                ,{
+                    name:'aaa',
+                path:'/aaa',
+                component:comA
+            }
+            ,{
+                path:'/bbb',
+                component:comB
+            },{
+                path:'/ccc',
+                component:comC
+            }
+            ]
+        })
+        new Vue({
+            el:'#app',
+            router
+        })
+
+    </script>
+</body>
+
+</html>
